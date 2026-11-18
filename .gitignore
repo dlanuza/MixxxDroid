@@ -1,0 +1,38 @@
+# Android Studio
+.idea/
+*.iml
+
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Kotlin
+.kotlin/
+
+# Local configuration
+local.properties
+
+# Native build
+.externalNativeBuild/
+.cxx/
+
+# APK / AAB
+*.apk
+*.aab
+
+# Secrets
+*.keystore
+*.jks
+secrets.properties
+
+# System
+.DS_Store
+Thumbs.db
+
+# Captures
+captures/
+archivos_codigo.txt
+*.bak
+*.bak
+*.bak

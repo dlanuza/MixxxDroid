@@ -1,0 +1,54 @@
+--- a/BPMDetect.h
++++ b/BPMDetect.h
+@@
+-        void removeBias();
++        // Remove linear bias from a working copy of the autocorrelation data.
++        // Do not modify xcorr: getBpm() may be called repeatedly during playback.
++        void removeBias(float *data);
+--- a/BPMDetect.cpp
++++ b/BPMDetect.cpp
+@@
+-void BPMDetect::removeBias()
++void BPMDetect::removeBias(float *data)
+ {
+@@
+-        mean_x += xcorr[i];
++        mean_x += data[i];
+@@
+-        double xt = xcorr[i] - mean_x;
++        double xt = data[i] - mean_x;
+@@
+-        xcorr[i] -= (float)(b * i);
+-        if (xcorr[i] < minval)
++        data[i] -= (float)(b * i);
++        if (data[i] < minval)
+         {
+-            minval = xcorr[i];
++            minval = data[i];
+@@
+-        xcorr[i] -= minval;
++        data[i] -= minval;
+@@
+ float BPMDetect::getBpm()
+ {
+@@
+-    // remove bias from xcorr data
+-    removeBias();
++    // Work on a snapshot. The old implementation called removeBias() on xcorr
++    // itself, permanently changing the accumulated autocorrelation every time
++    // getBpm() was queried. In live playback this function is called repeatedly,
++    // so each query corrupted the data used by the next query.
++    float *working = new float[windowLen];
++    memcpy(working, xcorr, windowLen * sizeof(float));
++    removeBias(working);
+@@
+-    _SaveDebugData("soundtouch-bpm-xcorr.txt", xcorr, windowStart, windowLen, coeff);
++    _SaveDebugData("soundtouch-bpm-xcorr.txt", working, windowStart, windowLen, coeff);
+@@
+-    MAFilter(data, xcorr, windowStart, windowLen, MOVING_AVERAGE_N);
++    MAFilter(data, working, windowStart, windowLen, MOVING_AVERAGE_N);
+@@
+-    delete[] data;
++    delete[] data;
++    delete[] working;
+*** End Patch

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MixxxDroid" parent="android:Theme.Material.NoActionBar">
+        <!-- Forzamos el fondo negro carbón desde el inicio nativo del sistema -->
+        <item name="android:windowBackground">@color/black_carbon</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- Oculta la barra de notificaciones/estado de forma limpia si lo deseas -->
+        <item name="android:windowFullscreen">false</item>
+    </style>
+</resources>
